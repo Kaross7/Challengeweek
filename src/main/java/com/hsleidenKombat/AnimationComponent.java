@@ -13,13 +13,18 @@ public class AnimationComponent extends Component {
     private int speed = 0;
 
     private AnimatedTexture texture;
+    private AnimatedTexture texture1;
     private AnimationChannel animIdle, animWalk;
+    private AnimationChannel background;
 
     public AnimationComponent() {
         animIdle = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 1);
         animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 0, 3);
+        background = new AnimationChannel(FXGL.getAssetLoader().loadTexture("background1.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 0, 3);
+
 
         texture = new AnimatedTexture(animIdle);
+        texture1 = new AnimatedTexture(background);
     }
 
     @Override
@@ -57,3 +62,6 @@ public class AnimationComponent extends Component {
         getEntity().setScaleX(-1);
     }
 }
+
+//    public void addBackground(){
+//    }

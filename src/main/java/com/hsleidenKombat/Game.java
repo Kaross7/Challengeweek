@@ -2,46 +2,51 @@ package com.hsleidenKombat;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.core.asset.AssetLoaderService;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
-import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.almasb.fxgl.texture.AnimationChannel;
+import com.almasb.fxgl.texture.Texture;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 public class Game extends GameApplication {
 
     private Entity player1, player2;
+    private Game background1;
 
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Hsleiden Kombat");
-        settings.setWidth(800);
-        settings.setHeight(600);
+        settings.setWidth(2000);
+        settings.setHeight(1000);
+        settings.setFullScreenAllowed(true);
+        settings.setFullScreenFromStart(true);
     }
 
     @Override
     protected void initGame() {
+//        background1 = new Game(FXGL.getAssetLoader().loadTexture("background1.png"));
+
+        getGameScene().setBackgroundRepeat("background2.png");
 
          player1 = FXGL.entityBuilder()
                 .at(100, 300)
-                .with(new AnimationComponent())
+                .viewWithBBox("")
                  .with(new CollidableComponent(true))
                  .type(EntityTypes.PLAYER1)
                 .buildAndAttach();
-
 
         player1.setScaleY(2.0);
 
         player2 = FXGL.entityBuilder()
                 .at(700, 300)
-                .with(new AnimationComponent())
+                .viewWithBBox("")
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.PLAYER2)
                 .buildAndAttach();
