@@ -5,6 +5,7 @@ import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import javafx.scene.input.KeyCode;
 
+
 public class Player1Controls {
     private Entity player;
     private KeyCode left, right, down, up;

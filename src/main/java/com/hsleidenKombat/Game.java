@@ -2,6 +2,7 @@ package com.hsleidenKombat;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.asset.AssetLoaderService;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
@@ -30,7 +31,7 @@ public class Game extends GameApplication {
 
          player1 = FXGL.entityBuilder()
                 .at(100, 300)
-                .viewWithBBox("player.png")
+                .with(new AnimationComponent())
                  .with(new CollidableComponent(true))
                  .type(EntityTypes.PLAYER1)
                 .buildAndAttach();
@@ -40,7 +41,7 @@ public class Game extends GameApplication {
 
         player2 = FXGL.entityBuilder()
                 .at(700, 300)
-                .viewWithBBox("player2.png")
+                .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .type(EntityTypes.PLAYER2)
                 .buildAndAttach();
@@ -62,7 +63,6 @@ public class Game extends GameApplication {
             }
         });
     }
-
     public static void main(String[] args) {
         launch(args);
     }
