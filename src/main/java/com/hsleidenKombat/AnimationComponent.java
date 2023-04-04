@@ -13,12 +13,12 @@ public class AnimationComponent extends Component {
     private double speed = 1;
 
     private AnimatedTexture texture;
-    private AnimationChannel animIdle, animWalk, animIdleMirror;
+    private AnimationChannel animIdle, animWalk, animPunch;
 
     public AnimationComponent() {
         animIdle = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 1);
         animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 0, 3);
-        animIdleMirror = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheetMirror.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 1);
+        animPunch = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 4, 6);
 
         texture = new AnimatedTexture(animIdle);
     }
@@ -69,5 +69,10 @@ public class AnimationComponent extends Component {
         speed = -150;
 
         getEntity().setScaleX(-1);
+    }
+
+    public void punch() {
+        System.out.println("AnimationComponent: punch()");
+        texture.loopAnimationChannel(animPunch);
     }
 }

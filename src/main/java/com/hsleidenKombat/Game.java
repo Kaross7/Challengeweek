@@ -5,7 +5,9 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.asset.AssetLoaderService;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.Input;
@@ -15,14 +17,17 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.sun.javafx.geom.Point2D;
+import com.sun.javafx.geom.Rectangle;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
-    private Entity player1, player2;
+    private Entity player1, player2, punch;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -36,11 +41,12 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-        getGameScene().setBackgroundRepeat("background7.jpeg");
+        
+        getGameScene().setBackgroundRepeat("MapTest.png");
 
 
         player1 = FXGL.entityBuilder()
-                .at(100, 300)
+                .at(100, 350)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .with(new HealthComponent())
@@ -52,7 +58,7 @@ public class Game extends GameApplication {
         player1.addComponent(new PlayerComponent());
 
         player2 = FXGL.entityBuilder()
-                .at(700, 300)
+                .at(700, 350)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(BoundingShape.box(65,135)))
@@ -61,10 +67,10 @@ public class Game extends GameApplication {
 
 
         player2.setScaleY(2.0);
+        player2.setScaleX(-1);
         player2.addComponent(new PlayerComponent());
 
         Input input = getInput();
-
 
 
 
@@ -124,6 +130,20 @@ public class Game extends GameApplication {
             }
         }, KeyCode.UP);
 
+        input.addAction(new UserAction("punch") {
+            private Entity punch;
+
+            @Override
+            protected void onAction() {
+                player2.getComponent(AnimationComponent.class).punch();
+                punch = FXGL.entityBuilder()
+                        .at(player1.getPosition().add(player1.getScaleX() * 40, 0))
+                        .bbox(new HitBox(BoundingShape.box(100,20)))
+                        .buildAndAttach();
+            }
+
+        }, KeyCode.F);
+
 
         input.addAction(new UserAction("Duck2") {
             @Override
@@ -135,6 +155,8 @@ public class Game extends GameApplication {
                 player2.getComponent(PlayerComponent.class).downReleased();
             }
         }, KeyCode.DOWN);
+
+
     }
 
 
