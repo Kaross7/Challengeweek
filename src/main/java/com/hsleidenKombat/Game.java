@@ -2,6 +2,7 @@ package com.hsleidenKombat;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.asset.AssetLoaderService;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.BoundingShape;
@@ -28,14 +29,14 @@ public class Game extends GameApplication {
 
          player1 = FXGL.entityBuilder()
                 .at(100, 300)
-                .viewWithBBox("player.png")
+                .with(new AnimationComponent())
                 .buildAndAttach();
 
         player1.setScaleY(2.0);
 
         player2 = FXGL.entityBuilder()
                 .at(700, 300)
-                .viewWithBBox("player2.png")
+                .with(new AnimationComponent())
                 .buildAndAttach();
 
         player2.setScaleY(2.0);
@@ -46,9 +47,6 @@ public class Game extends GameApplication {
         Player2Controls player2Controls = new Player2Controls(player2, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.DOWN, KeyCode.UP);
         player2Controls.init(getInput());
     }
-
-
-
 
 
     public static void main(String[] args) {
