@@ -17,6 +17,7 @@ import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import javafx.scene.input.KeyCode;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 public class Game extends GameApplication {
@@ -33,6 +34,8 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
+        getGameScene().setBackgroundRepeat("background7.jpeg");
+
 
         player1 = FXGL.entityBuilder()
                 .at(100, 300)
