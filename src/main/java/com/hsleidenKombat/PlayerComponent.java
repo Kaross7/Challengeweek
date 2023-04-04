@@ -21,7 +21,7 @@ public class PlayerComponent extends Component {
             position.translateY(-jumpSpeed * tpf);
             jumpSpeed -= gravity * tpf;
             if (position.getY() >= 300) {
-                if(!isDucking) {
+                if (!isDucking) {
                     isJumping = false;
                     position.setY(300);
                 }
@@ -35,6 +35,7 @@ public class PlayerComponent extends Component {
             isJumping = true;
         }
     }
+
     public void down() {
         if (!isJumping && !isDucking) {
             isDucking = true;
@@ -45,17 +46,18 @@ public class PlayerComponent extends Component {
 
     public void downReleased() {
         if (isDucking) {
-            isDucking= false;
+            isDucking = false;
             position.setScaleY(2.0);
             position.setY(300);
         }
     }
 
 
-    public void left(){
+    public void left() {
         position.translateX(-5 * speed);
     }
-    public void right(){
+
+    public void right() {
         position.translateX(5 * speed);
     }
 }

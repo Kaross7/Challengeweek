@@ -38,6 +38,7 @@ public class Game extends GameApplication {
                 .at(100, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
+                .with(new HealthComponent())
                 .bbox(new HitBox(BoundingShape.box(65,135)))
                 .type(EntityTypes.PLAYER1)
                 .buildAndAttach();
@@ -55,7 +56,7 @@ public class Game extends GameApplication {
 
 
         player2.setScaleY(2.0);
-        player2.addComponent(new Player2Component());
+        player2.addComponent(new PlayerComponent());
 
         Input input = getInput();
 
@@ -100,21 +101,21 @@ public class Game extends GameApplication {
         input.addAction(new UserAction("Move Left 2") {
             @Override
             protected void onAction() {
-                player2.getComponent(Player2Component.class).left2();
+                player2.getComponent(PlayerComponent.class).left();
             }
         }, KeyCode.LEFT);
 
         input.addAction(new UserAction("Move Right 2") {
             @Override
             protected void onAction() {
-                player2.getComponent(Player2Component.class).right2();
+                player2.getComponent(PlayerComponent.class).right();
             }
         }, KeyCode.RIGHT);
 
         input.addAction(new UserAction("Move Up 2") {
             @Override
             protected void onAction() {
-                player2.getComponent(Player2Component.class).jump2();
+                player2.getComponent(PlayerComponent.class).jump();
             }
         }, KeyCode.UP);
 
@@ -122,26 +123,27 @@ public class Game extends GameApplication {
         input.addAction(new UserAction("Duck2") {
             @Override
             protected void onAction() {
-                player2.getComponent(Player2Component.class).down2();
+                player2.getComponent(PlayerComponent.class).down();
             }
 
             protected void onActionEnd() {
-                player2.getComponent(Player2Component.class).downReleased();
+                player2.getComponent(PlayerComponent.class).downReleased();
             }
         }, KeyCode.DOWN);
     }
 
 
 
-        protected void initPhysics () {
-            FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PLAYER2) {
-                @Override
-                protected void onCollision(Entity player1, Entity player2) {
-                    player2.setScaleY(3.0);
-                }
-            });
-
-        }
+    protected void initPhysics () {
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PLAYER2) {
+            @Override
+            protected void onCollision(Entity player1, Entity player2) {
+                player2.setScaleY(3.0);
+                player1.getComponent(HealthComponent.class).decrease(10);
+                player2.getComponent(HealthComponent.class).decrease(10);
+            }
+        });
+    }
         public static void main (String[]args){
             launch(args);
         }
