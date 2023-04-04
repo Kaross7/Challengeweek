@@ -27,6 +27,7 @@ public class Player2Component extends Component {
                 }
             }
         }
+        
     }
 
     public void jump2() {
