@@ -8,7 +8,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 public class PlayerComponent extends Component {
     private TransformComponent position;
-    private double speed = 0;
+    private double speed = 100;
     private double jumpSpeed = 0;
     private boolean isJumping = false;
     private boolean isDucking = false;
@@ -54,10 +54,12 @@ public class PlayerComponent extends Component {
 
 
     public void left() {
+        System.out.println("AnimationComponent: left()");
         position.translateX(-5 * speed);
     }
 
     public void right() {
+        System.out.println("AnimationComponent: right()");
         position.translateX(5 * speed);
     }
 }

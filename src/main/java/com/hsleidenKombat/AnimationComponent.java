@@ -10,50 +10,64 @@ import javafx.util.Duration;
 
 public class AnimationComponent extends Component {
 
-    private int speed = 0;
+    private double speed = 1;
 
     private AnimatedTexture texture;
-    private AnimationChannel animIdle, animWalk;
+    private AnimationChannel animIdle, animWalk, animIdleMirror;
 
     public AnimationComponent() {
         animIdle = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 1);
-        animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet-lopen.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 0, 3);
+        animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 0, 3);
+        animIdleMirror = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheetMirror.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 1);
 
         texture = new AnimatedTexture(animIdle);
     }
 
-        @Override
-        public void onAdded() {
-            entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
-            entity.getViewComponent().addChild(texture);
-        }
+    @Override
+    public void onAdded() {
+        entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
+        entity.getViewComponent().addChild(texture);
+    }
 
-        @Override
-        public void onUpdate(double tpf) {
+    @Override
+    public void onUpdate(double tpf) {
+        if (speed != 0) {
             entity.translateX(speed * tpf);
-
-            if (speed != 0) {
-                texture.loopAnimationChannel(animWalk);
-            } else {
-                texture.loopAnimationChannel(animIdle);
-            }
-
-            speed = (int) (speed * 0.9);
-
-            if (FXGLMath.abs(speed) < 1) {
-                speed = 0;
-            }
         }
 
-        public void right() {
-            speed = 150;
+//        System.out.println("update");
+////        System.out.println(texture.getAnimationChannel());
+        System.out.println(speed);
+//        System.out.println(texture.getAnimationChannel() == animIdle);
+//        System.out.println(texture.getAnimationChannel() == animWalk);
 
-            getEntity().setScaleX(1);
+
+        if (speed != 0 && texture.getAnimationChannel() != animWalk) {
+            System.out.println("hello");
+            texture.loopAnimationChannel(animWalk);
+        } else if (speed == 0 && texture.getAnimationChannel() != animIdle) {
+            System.out.println("hoi");
+            texture.loopAnimationChannel(animIdle);
         }
 
-        public void left() {
-            speed = -150;
+//        speed = (speed * 0.9);
 
-            getEntity().setScaleX(-1);
+        if (FXGLMath.abs(speed) < 1) {
+            speed = 0;
         }
     }
+
+    public void right() {
+        System.out.println("AnimationComponent: right()");
+        speed = 150;
+
+        getEntity().setScaleX(1);
+    }
+
+    public void left() {
+        System.out.println("AnimationComponent: left()");
+        speed = -150;
+
+        getEntity().setScaleX(-1);
+    }
+}

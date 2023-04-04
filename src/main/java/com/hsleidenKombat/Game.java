@@ -139,8 +139,6 @@ public class Game extends GameApplication {
             @Override
             protected void onCollision(Entity player1, Entity player2) {
                 player2.setScaleY(3.0);
-                player1.getComponent(HealthComponent.class).decrease(10);
-                player2.getComponent(HealthComponent.class).decrease(10);
             }
         });
     }
