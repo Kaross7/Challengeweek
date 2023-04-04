@@ -27,8 +27,10 @@ public class Game extends GameApplication {
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Hsleiden Kombat");
-        settings.setWidth(800);
-        settings.setHeight(600);
+//        settings.setWidth(1000);
+//        settings.setHeight(1000);
+        settings.setFullScreenFromStart(true);
+        settings.setFullScreenAllowed(true);
         settings.setDeveloperMenuEnabled(true);
     }
 
