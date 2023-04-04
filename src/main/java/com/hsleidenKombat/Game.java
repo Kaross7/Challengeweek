@@ -1,10 +1,12 @@
 package com.hsleidenKombat;
 
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.asset.AssetLoaderService;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
@@ -26,6 +28,7 @@ public class Game extends GameApplication {
         settings.setTitle("Hsleiden Kombat");
         settings.setWidth(800);
         settings.setHeight(600);
+        settings.setDeveloperMenuEnabled(true);
     }
 
     @Override
@@ -35,6 +38,7 @@ public class Game extends GameApplication {
                 .at(100, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
+                .bbox(new HitBox(BoundingShape.box(65,135)))
                 .type(EntityTypes.PLAYER1)
                 .buildAndAttach();
 
@@ -45,13 +49,18 @@ public class Game extends GameApplication {
                 .at(700, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
+                .bbox(new HitBox(BoundingShape.box(65,135)))
                 .type(EntityTypes.PLAYER2)
                 .buildAndAttach();
+
 
         player2.setScaleY(2.0);
         player2.addComponent(new Player2Component());
 
         Input input = getInput();
+
+
+
 
 // Bewegingskeybinds voor player1
         input.addAction(new UserAction("Move Left") {
@@ -122,13 +131,16 @@ public class Game extends GameApplication {
         }, KeyCode.DOWN);
     }
 
+
+
         protected void initPhysics () {
             FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PLAYER2) {
                 @Override
                 protected void onCollision(Entity player1, Entity player2) {
-                    player2.removeFromWorld();
+                    player2.setScaleY(3.0);
                 }
             });
+
         }
         public static void main (String[]args){
             launch(args);
