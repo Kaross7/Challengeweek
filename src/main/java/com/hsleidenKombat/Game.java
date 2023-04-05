@@ -180,23 +180,23 @@ public class Game extends GameApplication {
             }
         }, KeyCode.D);
 
-        input.addAction(new UserAction("Move Up") {
-            @Override
-            protected void onAction() {
-                player1.getComponent(PlayerComponent.class).jump();
-            }
-        }, KeyCode.W);
+            input.addAction(new UserAction("Move Up") {
+                @Override
+                protected void onAction() {
+                    player1.getComponent(PlayerComponent.class).jump();
+                }
+            }, KeyCode.W);
 
-        input.addAction(new UserAction("Duck") {
-            @Override
-            protected void onAction() {
-                player1.getComponent(PlayerComponent.class).down();
-            }
+            input.addAction(new UserAction("Duck") {
+                @Override
+                protected void onAction() {
+                    player1.getComponent(PlayerComponent.class).down();
+                }
 
-            protected void onActionEnd() {
-                player1.getComponent(PlayerComponent.class).downReleased();
-            }
-        }, KeyCode.S);
+                protected void onActionEnd() {
+                    player1.getComponent(PlayerComponent.class).downReleased();
+                }
+            }, KeyCode.S);
 
 
         input.addAction(new UserAction("Move Left 2") {
@@ -231,24 +231,24 @@ public class Game extends GameApplication {
             }
         }, KeyCode.RIGHT);
 
-        input.addAction(new UserAction("Move Up 2") {
-            @Override
-            protected void onAction() {
-                player2.getComponent(PlayerComponent.class).jump();
-            }
-        }, KeyCode.UP);
+            input.addAction(new UserAction("Move Up 2") {
+                @Override
+                protected void onAction() {
+                    player2.getComponent(PlayerComponent.class).jump();
+                }
+            }, KeyCode.UP);
 
 
-        input.addAction(new UserAction("Duck2") {
-            @Override
-            protected void onAction() {
-                player2.getComponent(PlayerComponent.class).down();
-            }
+            input.addAction(new UserAction("Duck2") {
+                @Override
+                protected void onAction() {
+                    player2.getComponent(PlayerComponent.class).down();
+                }
 
-            protected void onActionEnd() {
-                player2.getComponent(PlayerComponent.class).downReleased();
-            }
-        }, KeyCode.DOWN);
+                protected void onActionEnd() {
+                    player2.getComponent(PlayerComponent.class).downReleased();
+                }
+            }, KeyCode.DOWN);
 
         input.addAction(new UserAction("Punch") {
             @Override
@@ -278,7 +278,7 @@ public class Game extends GameApplication {
 
 
 
-    protected void initPhysics() {
+    protected void initPhysics () {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PLAYER2) {
             @Override
             protected void onCollision(Entity player1, Entity player2) {
@@ -286,8 +286,7 @@ public class Game extends GameApplication {
             }
         });
     }
-
-    public static void main(String[] args) {
-        launch(args);
+        public static void main (String[]args){
+            launch(args);
+        }
     }
-}
