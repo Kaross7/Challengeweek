@@ -31,11 +31,9 @@ public class FactoryComponent {
     }
 
     @Spawns("player2")
-
     public Entity spawnPlayer2(double x, double y) {
 
         Entity player2 = entityBuilder()
-
                 .at(x, y)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
