@@ -14,6 +14,8 @@ public class PlayerComponent extends Component {
     private boolean isJumping = false;
     private boolean isDucking = false;
     private double gravity = 2500;
+    private boolean collidedRight = false;
+    private boolean collidedLeft = false;
 
 
     private void applyGravity(double tpf) {
@@ -69,18 +71,32 @@ public class PlayerComponent extends Component {
 
     public void left() {
         System.out.println("AnimationComponent: left()");
-
-        if (position.getX() > 1) {
+        if (!collidedLeft) {
+            collidedRight = false;
+            if (position.getX() > 1) {
             position.translateX(-5 * speed);
+            }
         }
 
     }
 
     public void right() {
         System.out.println("AnimationComponent: right()");
-        if (position.getX() < 735) {
-            position.translateX(5 * speed);
+        if (!collidedRight) {
+            collidedLeft = false;
+            if (position.getX() < 735) {
+                position.translateX(5 * speed);
+            }
         }
+    }
+
+
+
+    public void setcollidedRight(boolean b) {
+        collidedRight = b;
+    }
+    public void setcollidedLeft(boolean b) {
+        collidedLeft = b;
     }
 }
 

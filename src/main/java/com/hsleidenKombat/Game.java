@@ -128,7 +128,8 @@ public class Game extends GameApplication {
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PLAYER2) {
             @Override
             protected void onCollision(Entity player1, Entity player2) {
-                player2.setScaleY(3.0);
+                player1.getComponent(PlayerComponent.class).setcollidedRight(true);
+                player2.getComponent(PlayerComponent.class).setcollidedLeft(true);
             }
         });
     }
