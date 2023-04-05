@@ -42,11 +42,11 @@ public class Game extends GameApplication {
     @Override
     protected void initGame() {
         
-        getGameScene().setBackgroundRepeat("MapTest.png");
+        getGameScene().setBackgroundRepeat("Background7.jpeg");
 
 
         player1 = FXGL.entityBuilder()
-                .at(100, 350)
+                .at(100, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .with(new HealthComponent())
@@ -58,7 +58,7 @@ public class Game extends GameApplication {
         player1.addComponent(new PlayerComponent());
 
         player2 = FXGL.entityBuilder()
-                .at(700, 350)
+                .at(700, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(BoundingShape.box(65,135)))
