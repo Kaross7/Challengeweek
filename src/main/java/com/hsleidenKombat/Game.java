@@ -1,5 +1,20 @@
 package com.hsleidenKombat;
 
+
+import javafx.geometry.Insets;
+import javafx.geometry.HPos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.scene.layout.StackPane;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -169,7 +184,14 @@ public class Game extends GameApplication {
     }
 
     private void createMenu() {
-        VBox menuBox = new VBox(10);
+        GridPane menuBox = new GridPane();
+        menuBox.setHgap(10);
+        menuBox.setVgap(10);
+        menuBox.setPadding(new Insets(10, 10, 10, 10));
+        ColumnConstraints column = new ColumnConstraints();
+        column.setHalignment(HPos.CENTER);
+        menuBox.getColumnConstraints().add(column);
+
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(getAppWidth(), getAppHeight());
 
@@ -178,7 +200,10 @@ public class Game extends GameApplication {
         title.setFill(Color.WHITE);
         title.setText(title.getText().toUpperCase());
 
-        stackPane.getChildren().add(title);
+        StackPane titlePane = new StackPane(); // Nieuwe StackPane voor alleen de titel
+        titlePane.getChildren().add(title);
+        stackPane.getChildren().add(titlePane);
+
         getGameScene().addUINode(stackPane);
 
         menuBox.setTranslateY(getAppHeight() / 2 - 100);
@@ -194,8 +219,14 @@ public class Game extends GameApplication {
         startButton = new Button("Beginnen");
         startButton.setMaxWidth(200);
 
-        menuBox.getChildren().addAll(title, player1NameField, player2NameField, startButton);
-        getGameScene().addUINode(menuBox);
+        StackPane menuContainer = new StackPane(); // Nieuwe StackPane voor het menu
+        menuContainer.getChildren().add(menuBox);
+        menuContainer.setTranslateY(getAppHeight() / 2 - 100);
+
+        menuBox.add(player1NameField, 0, 0);
+        menuBox.add(player2NameField, 0, 1);
+        menuBox.add(startButton, 0, 2);
+        getGameScene().addUINode(menuContainer);
 
         startButton.setOnAction(e -> {
             String player1Name = player1NameField.getText();
@@ -207,6 +238,9 @@ public class Game extends GameApplication {
             }
         });
     }
+
+
+
 
     private void startGame() {
         // Verberg het menu scherm
