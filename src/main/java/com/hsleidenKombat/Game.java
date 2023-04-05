@@ -30,7 +30,6 @@ public class Game extends GameApplication {
 
     private Entity player1, player2, punch;
 
-
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Hsleiden Kombat");
@@ -130,6 +129,8 @@ public class Game extends GameApplication {
             protected void onCollision(Entity player1, Entity player2) {
                 player1.getComponent(PlayerComponent.class).setcollidedRight(true);
                 player2.getComponent(PlayerComponent.class).setcollidedLeft(true);
+
+//                if player1.getComponent(AnimationComponent.class).isPUnching
             }
         });
     }

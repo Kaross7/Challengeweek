@@ -17,7 +17,6 @@ public class PlayerComponent extends Component {
     private boolean collidedRight = false;
     private boolean collidedLeft = false;
 
-
     private void applyGravity(double tpf) {
         position.translateY(-jumpSpeed * tpf);
         jumpSpeed -= gravity * tpf;
