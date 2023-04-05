@@ -29,11 +29,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.nio.file.Paths;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
@@ -59,7 +63,7 @@ public class Game extends GameApplication {
     }
 
 
-    private void createMenu() {
+    private void createMenu1() {
         GridPane menuBox = new GridPane();
         menuBox.setHgap(10);
         menuBox.setVgap(10);
@@ -115,28 +119,11 @@ public class Game extends GameApplication {
         });
     }
 
-
-    private void startGame() {
-        // Verberg het menu scherm
-        this.title.setVisible(false);
-        player1NameField.setVisible(false);
-        player2NameField.setVisible(false);
-        startButton.setVisible(false);
-
-        // Initialize and display game elements here
-        // Add your game elements initialization code here
-    }
-
-
     @Override
     protected void initGame() {
         getGameScene().setBackgroundRepeat("login.jpeg");
 
         createMenu();
-
-        getGameScene().setBackgroundRepeat("Background7.jpeg");
-
-        getGameScene().setBackgroundRepeat("Background7.jpeg");
 
         FactoryComponent factoryComponent = new FactoryComponent();
         player1 = factoryComponent.spawnPlayer1(100, 300);
@@ -270,6 +257,8 @@ public class Game extends GameApplication {
                 player2.getComponent(AnimationComponent.class).finishPunch();
             }
         }, KeyCode.L);
+    }
+
     private void createMenu() {
         VBox menuBox = new VBox(10);
         StackPane stackPane = new StackPane();
@@ -308,7 +297,6 @@ public class Game extends GameApplication {
             String player1Name = player1NameField.getText();
             String player2Name = player2NameField.getText();
 
-    }
             if (!player1Name.isEmpty() && !player2Name.isEmpty()) {
                 // Doel: start het spel en verberg het menu scherm
                 startGame();
@@ -322,10 +310,11 @@ public class Game extends GameApplication {
         player1NameField.setVisible(false);
         player2NameField.setVisible(false);
         startButton.setVisible(false);
-        getGameScene().setBackgroundRepeat("background7.jpeg");
+        getGameScene().setBackgroundRepeat("login.jpeg");
 
         startlevel2();
     }
+
 
     private void startlevel2(){
         this.title.setVisible(false);
@@ -354,7 +343,8 @@ public class Game extends GameApplication {
             }
         });
     }
-        public static void main (String[]args){
+
+    public static void main (String[]args){
             launch(args);
-        }
     }
+}
