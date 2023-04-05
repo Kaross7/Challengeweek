@@ -261,7 +261,7 @@ public class Game extends GameApplication {
 
         title = new Text("Hsleiden Kombat");
         title.setFont(Font.font("Verdana", 40));
-        title.setFill(Color.BLACK);
+        title.setFill(Color.YELLOWGREEN);
         title.setText(title.getText().toUpperCase());
 
         stackPane.getChildren().add(title);
@@ -314,9 +314,23 @@ public class Game extends GameApplication {
         player2 = factoryComponent.spawnPlayer2(700, 300);
         getGameWorld().addEntity(player2);
 
+        Text player1NameText = new Text(player1NameField.getText().toUpperCase());
+        Text player2NameText = new Text(player2NameField.getText().toUpperCase());
+
+        player1NameText.setFill(Color.YELLOWGREEN);
+        player2NameText.setFill(Color.YELLOWGREEN);
+
+        player1NameText.setX(50);
+        player1NameText.setY(50);
+        player2NameText.setX(getAppWidth() - 150);
+        player2NameText.setY(50);
+
+        getGameScene().addUINode(player1NameText);
+        getGameScene().addUINode(player2NameText);
 
         startlevel2();
     }
+
 
 
     private void startlevel2(){
