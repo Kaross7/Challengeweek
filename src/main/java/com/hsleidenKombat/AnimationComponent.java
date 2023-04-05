@@ -71,8 +71,8 @@ public class AnimationComponent extends Component {
         getEntity().setScaleX(-1);
     }
 
-    public void punch() {
-        System.out.println("AnimationComponent: punch()");
-        texture.loopAnimationChannel(animPunch);
-    }
+//    public void punch() {
+//        System.out.println("AnimationComponent: punch()");
+//        texture.loopAnimationChannel(animPunch);
+//    }
 }

@@ -21,6 +21,7 @@ import com.sun.javafx.geom.Point2D;
 import com.sun.javafx.geom.Rectangle;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
@@ -41,40 +42,43 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-        
+
         getGameScene().setBackgroundRepeat("Background7.jpeg");
+
 
 
         player1 = FXGL.entityBuilder()
                 .at(100, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
+                .with(new PlayerComponent())
                 .with(new HealthComponent())
                 .bbox(new HitBox(BoundingShape.box(65,135)))
                 .type(EntityTypes.PLAYER1)
                 .buildAndAttach();
 
         player1.setScaleY(2.0);
-        player1.addComponent(new PlayerComponent());
+
 
         player2 = FXGL.entityBuilder()
                 .at(700, 300)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
+                .with(new PlayerComponent())
                 .bbox(new HitBox(BoundingShape.box(65,135)))
                 .type(EntityTypes.PLAYER2)
                 .buildAndAttach();
 
-
         player2.setScaleY(2.0);
         player2.setScaleX(-1);
-        player2.addComponent(new PlayerComponent());
 
         Input input = getInput();
 
 
 
-// Bewegingskeybinds voor player1
+
+
+
         input.addAction(new UserAction("Move Left") {
             @Override
             protected void onAction() {
@@ -108,7 +112,7 @@ public class Game extends GameApplication {
         }, KeyCode.S);
 
 
-        // Bewegingskeybinds voor player2
+
         input.addAction(new UserAction("Move Left 2") {
             @Override
             protected void onAction() {
@@ -129,20 +133,6 @@ public class Game extends GameApplication {
                 player2.getComponent(PlayerComponent.class).jump();
             }
         }, KeyCode.UP);
-
-        input.addAction(new UserAction("punch") {
-            private Entity punch;
-
-            @Override
-            protected void onAction() {
-                player2.getComponent(AnimationComponent.class).punch();
-                punch = FXGL.entityBuilder()
-                        .at(player1.getPosition().add(player1.getScaleX() * 40, 0))
-                        .bbox(new HitBox(BoundingShape.box(100,20)))
-                        .buildAndAttach();
-            }
-
-        }, KeyCode.F);
 
 
         input.addAction(new UserAction("Duck2") {
