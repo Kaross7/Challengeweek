@@ -20,9 +20,10 @@ public class AnimationComponent extends Component {
 
 
     public AnimationComponent() {
-        animIdle = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 8);
+        animIdle = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(1), 1, 9);
         animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet-lopen.png").getImage(), 10, 87, 137, Duration.seconds(0.5), 0, 3);
-        animPunch = new AnimationChannel(FXGL.getAssetLoader().loadTexture("punch.png").getImage(), 10, 70, 137, Duration.seconds(1), 4, 6);
+        animPunch = new AnimationChannel(FXGL.getAssetLoader().loadTexture("punch.png").getImage(), 10, 120, 137, Duration.seconds(0.3), 1, 3);
+
 
         texture = new AnimatedTexture(animIdle);
         texture.loopAnimationChannel(animIdle);

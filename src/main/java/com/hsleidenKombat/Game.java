@@ -125,13 +125,8 @@ public class Game extends GameApplication {
 
         createMenu();
 
-        FactoryComponent factoryComponent = new FactoryComponent();
-        player1 = factoryComponent.spawnPlayer1(100, 300);
-        getGameWorld().addEntity(player1);
-        player2 = factoryComponent.spawnPlayer2(700, 300);
-        getGameWorld().addEntity(player2);
-
         Input input = getInput();
+
 
         input.addAction(new UserAction("Move Left") {
             @Override
@@ -290,6 +285,7 @@ public class Game extends GameApplication {
         startButton = new Button("Beginnen");
         startButton.setMaxWidth(200);
 
+
         menuBox.getChildren().addAll(title, player1NameField, player2NameField, startButton);
         getGameScene().addUINode(menuBox);
 
@@ -311,6 +307,13 @@ public class Game extends GameApplication {
         player2NameField.setVisible(false);
         startButton.setVisible(false);
         getGameScene().setBackgroundRepeat("login.jpeg");
+
+        FactoryComponent factoryComponent = new FactoryComponent();
+        player1 = factoryComponent.spawnPlayer1(100, 300);
+        getGameWorld().addEntity(player1);
+        player2 = factoryComponent.spawnPlayer2(700, 300);
+        getGameWorld().addEntity(player2);
+
 
         startlevel2();
     }
