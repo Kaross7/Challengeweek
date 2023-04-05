@@ -1,6 +1,6 @@
 package com.hsleidenKombat;
 
-
+import javafx.scene.layout.StackPane;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.asset.AssetLoaderService;
@@ -22,12 +22,21 @@ import com.sun.javafx.geom.Rectangle;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
     private Entity player1, player2, punch;
+    private TextField player1NameField, player2NameField;
+    private Button startButton;
+
+    private Text title;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -41,9 +50,9 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-        
         getGameScene().setBackgroundRepeat("Background7.jpeg");
 
+        createMenu();
 
         player1 = FXGL.entityBuilder()
                 .at(100, 300)
@@ -159,6 +168,56 @@ public class Game extends GameApplication {
 
     }
 
+    private void createMenu() {
+        VBox menuBox = new VBox(10);
+        StackPane stackPane = new StackPane();
+        stackPane.setPrefSize(getAppWidth(), getAppHeight());
+
+        title = new Text("Hsleiden Kombat");
+        title.setFont(Font.font("Verdana", 60));
+        title.setFill(Color.WHITE);
+        title.setText(title.getText().toUpperCase());
+
+        stackPane.getChildren().add(title);
+        getGameScene().addUINode(stackPane);
+
+        menuBox.setTranslateY(getAppHeight() / 2 - 100);
+
+        player1NameField = new TextField();
+        player1NameField.setPromptText("Speler 1 naam");
+        player1NameField.setMaxWidth(200);
+
+        player2NameField = new TextField();
+        player2NameField.setPromptText("Speler 2 naam");
+        player2NameField.setMaxWidth(200);
+
+        startButton = new Button("Beginnen");
+        startButton.setMaxWidth(200);
+
+        menuBox.getChildren().addAll(title, player1NameField, player2NameField, startButton);
+        getGameScene().addUINode(menuBox);
+
+        startButton.setOnAction(e -> {
+            String player1Name = player1NameField.getText();
+            String player2Name = player2NameField.getText();
+
+            if (!player1Name.isEmpty() && !player2Name.isEmpty()) {
+                // Doel: start het spel en verberg het menu scherm
+                startGame();
+            }
+        });
+    }
+
+    private void startGame() {
+        // Verberg het menu scherm
+        this.title.setVisible(false);
+        player1NameField.setVisible(false);
+        player2NameField.setVisible(false);
+        startButton.setVisible(false);
+
+        // Initialize and display game elements here
+        // Add your game elements initialization code here
+    }
 
 
     protected void initPhysics () {
