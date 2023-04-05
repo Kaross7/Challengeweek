@@ -22,6 +22,15 @@ public class ShooterFactory implements EntityFactory{
                 .viewWithBBox(new Rectangle(10, 2, Color.BLUE))
                 .build();
     }
+    @Spawns("punch2")
+    public Entity newpunch2(SpawnData data) {
+        return FXGL.entityBuilder(data)
+                .type(EntityTypes.PUNCH2)
+                .with(new CollidableComponent(true))
+                .with(new HealthComponent())
+                .viewWithBBox(new Rectangle(10, 2, Color.BLUE))
+                .build();
+    }
 
 
 }

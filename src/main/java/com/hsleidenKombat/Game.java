@@ -43,7 +43,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
-    private Entity player1, player2, punch;
+    private Entity player1, player2, punch, punch2;
 
     private TextField player1NameField, player2NameField;
     private Button startButton;
@@ -51,6 +51,8 @@ public class Game extends GameApplication {
     private AnimationComponent animationComponent;
 
     private Text title;
+    private boolean punchActive = false;
+    private boolean punchActive2 = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -124,7 +126,6 @@ public class Game extends GameApplication {
     protected void initGame() {
         getGameWorld().addEntityFactory(new ShooterFactory());
         getGameScene().setBackgroundRepeat("login.jpeg");
-
 
 
         createMenu();
@@ -233,34 +234,50 @@ public class Game extends GameApplication {
             }
         }, KeyCode.DOWN);
 
+
         input.addAction(new UserAction("Punch") {
             @Override
             protected void onAction() {
-                player1.getComponent(AnimationComponent.class).startPunch();
-                punch = getGameWorld().spawn("punch", player1.getPosition().getX() + 100, player1.getPosition().getY());
+                if (!punchActive) {
+                    player1.getComponent(AnimationComponent.class).startPunch();
+                    punch = getGameWorld().spawn("punch", player1.getPosition().getX() + 100, player1.getPosition().getY());
+                    punchActive = true;
+                }
             }
 
             @Override
             protected void onActionEnd() {
-                player1.getComponent(AnimationComponent.class).finishPunch();
-                punch.removeFromWorld();
+                if (punchActive) {
+                    player1.getComponent(AnimationComponent.class).finishPunch();
+                    punch.removeFromWorld();
+                    punchActive = false;
+                }
             }
         }, KeyCode.F);
 
         input.addAction(new UserAction("Punch2") {
             @Override
             protected void onAction() {
-                player2.getComponent(AnimationComponent.class).startPunch();
+                if (!punchActive2) {
+                    player2.getComponent(AnimationComponent.class).startPunch();
+                    punch2 = getGameWorld().spawn("punch2", player2.getPosition().getX() - 50, player2.getPosition().getY());
+                    punchActive2 = true;
+                }
             }
 
             @Override
             protected void onActionEnd() {
-                player2.getComponent(AnimationComponent.class).finishPunch();
+                if (punchActive2) {
+                    player2.getComponent(AnimationComponent.class).finishPunch();
+                    punch2.removeFromWorld();
+                    punchActive2 = false;
+                }
             }
         }, KeyCode.L);
     }
 
-    private void createMenu() {
+
+        private void createMenu() {
         VBox menuBox = new VBox(10);
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(getAppWidth(), getAppHeight());
@@ -368,9 +385,19 @@ public class Game extends GameApplication {
 
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER2, EntityTypes.PUNCH) {
             @Override
-            protected void onCollision(Entity punch,Entity player2) {
-                player2.getComponent(HealthComponent.class).decrease(10);
+            protected void onCollision(Entity player2,Entity punch) {
+                player2.getComponent(HealthComponent.class).decrease(5);
+                player2.setX(player2.getX()+30);
                 System.out.println(player2.getComponent(HealthComponent.class).getHealth());
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PUNCH2) {
+            @Override
+            protected void onCollision(Entity player1,Entity punch2) {
+                player1.getComponent(HealthComponent.class).decrease(5);
+                player1.setX(player1.getX()-30);
+                System.out.println(player1.getComponent(HealthComponent.class).getHealth());
             }
         });
     }
