@@ -1,5 +1,5 @@
 package com.hsleidenKombat;
 
 public enum EntityTypes {
-    PLAYER1, PLAYER2, PUNCH
+    PLAYER1, PLAYER2, PUNCH,BULLET
 }

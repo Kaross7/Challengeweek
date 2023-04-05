@@ -69,7 +69,7 @@ public class PlayerComponent extends Component {
 
 
     public void left() {
-        System.out.println("AnimationComponent: left()");
+//        System.out.println("AnimationComponent: left()");
         if (!collidedLeft) {
             collidedRight = false;
             if (position.getX() > 1) {
@@ -80,7 +80,7 @@ public class PlayerComponent extends Component {
     }
 
     public void right() {
-        System.out.println("AnimationComponent: right()");
+//        System.out.println("AnimationComponent: right()");
         if (!collidedRight) {
             collidedLeft = false;
             if (position.getX() < 735) {

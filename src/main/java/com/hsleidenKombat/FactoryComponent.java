@@ -1,7 +1,9 @@
 package com.hsleidenKombat;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
@@ -37,6 +39,7 @@ public class FactoryComponent {
                 .at(x, y)
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
+                .with(new HealthComponent())
                 .bbox(new HitBox(BoundingShape.box(65, 135)))
                 .type(EntityTypes.PLAYER2)
                 .build();
@@ -45,16 +48,5 @@ public class FactoryComponent {
         player2.setScaleX(-1);
         player2.addComponent(new PlayerComponent());
         return player2;
-    }
-    @Spawns("punch")
-
-    public Entity spawnPunch() {
-        Entity punch = entityBuilder()
-                .with(new AnimationComponent())
-                .with(new CollidableComponent(true))
-                .bbox(new HitBox(BoundingShape.box(65, 10)))
-                .type(EntityTypes.PUNCH)
-                .build();
-        return punch;
     }
 }

@@ -92,6 +92,7 @@ public class Game extends GameApplication {
         player1NameField.setPromptText("Speler 1 naam");
         player1NameField.setMaxWidth(200);
 
+
         player2NameField = new TextField();
         player2NameField.setPromptText("Speler 2 naam");
         player2NameField.setMaxWidth(200);
@@ -121,7 +122,10 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
+        getGameWorld().addEntityFactory(new ShooterFactory());
         getGameScene().setBackgroundRepeat("login.jpeg");
+
+
 
         createMenu();
 
@@ -233,11 +237,13 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 player1.getComponent(AnimationComponent.class).startPunch();
+                punch = getGameWorld().spawn("punch", player1.getPosition().getX() + 100, player1.getPosition().getY());
             }
 
             @Override
             protected void onActionEnd() {
                 player1.getComponent(AnimationComponent.class).finishPunch();
+                punch.removeFromWorld();
             }
         }, KeyCode.F);
 
@@ -357,6 +363,14 @@ public class Game extends GameApplication {
             protected void onCollision(Entity player1, Entity player2) {
                 player1.getComponent(PlayerComponent.class).setcollidedRight(true);
                 player2.getComponent(PlayerComponent.class).setcollidedLeft(true);
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER2, EntityTypes.PUNCH) {
+            @Override
+            protected void onCollision(Entity punch,Entity player2) {
+                player2.getComponent(HealthComponent.class).decrease(10);
+                System.out.println(player2.getComponent(HealthComponent.class).getHealth());
             }
         });
     }
