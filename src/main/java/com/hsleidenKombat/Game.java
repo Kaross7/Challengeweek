@@ -30,6 +30,7 @@ public class Game extends GameApplication {
 
     private Entity player1, player2, punch;
 
+
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Hsleiden Kombat");
@@ -42,93 +43,83 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
-
         getGameScene().setBackgroundRepeat("Background7.jpeg");
+        FactoryComponent factoryComponent = new FactoryComponent();
+        player1 = factoryComponent.spawnPlayer1(100, 300);
+        getGameWorld().addEntity(player1);
+        player2 = factoryComponent.spawnPlayer2(700, 300);
+        getGameWorld().addEntity(player2);
 
-            getGameScene().setBackgroundRepeat("Background7.jpeg");
+        Input input = getInput();
 
-            FactoryComponent factoryComponent = new FactoryComponent();
+        input.addAction(new UserAction("Move Left") {
+            @Override
+            protected void onAction() {
+                player1.getComponent(PlayerComponent.class).left();
+            }
+        }, KeyCode.A);
 
-            player1 = factoryComponent.spawnPlayer1(100, 300);
+        input.addAction(new UserAction("Move Right") {
+            @Override
+            protected void onAction() {
+                player1.getComponent(PlayerComponent.class).right();
+            }
+        }, KeyCode.D);
 
-            getGameWorld().addEntity(player1);
+        input.addAction(new UserAction("Move Up") {
+            @Override
+            protected void onAction() {
+                player1.getComponent(PlayerComponent.class).jump();
+            }
+        }, KeyCode.W);
 
-            player2 = factoryComponent.spawnPlayer2(700, 300);
+        input.addAction(new UserAction("Duck") {
+            @Override
+            protected void onAction() {
+                player1.getComponent(PlayerComponent.class).down();
+            }
 
-            getGameWorld().addEntity(player2);
-
-
-            Input input = getInput();
-
-
-            input.addAction(new UserAction("Move Left") {
-                @Override
-                protected void onAction() {
-                    player1.getComponent(PlayerComponent.class).left();
-                }
-            }, KeyCode.A);
-
-            input.addAction(new UserAction("Move Right") {
-                @Override
-                protected void onAction() {
-                    player1.getComponent(PlayerComponent.class).right();
-                }
-            }, KeyCode.D);
-
-            input.addAction(new UserAction("Move Up") {
-                @Override
-                protected void onAction() {
-                    player1.getComponent(PlayerComponent.class).jump();
-                }
-            }, KeyCode.W);
-
-            input.addAction(new UserAction("Duck") {
-                @Override
-                protected void onAction() {
-                    player1.getComponent(PlayerComponent.class).down();
-                }
-
-                protected void onActionEnd() {
-                    player1.getComponent(PlayerComponent.class).downReleased();
-                }
-            }, KeyCode.S);
+            protected void onActionEnd() {
+                player1.getComponent(PlayerComponent.class).downReleased();
+            }
+        }, KeyCode.S);
 
 
-            input.addAction(new UserAction("Move Left 2") {
-                @Override
-                protected void onAction() {
-                    player2.getComponent(PlayerComponent.class).left();
-                }
-            }, KeyCode.LEFT);
+        input.addAction(new UserAction("Move Left 2") {
+            @Override
+            protected void onAction() {
+                player2.getComponent(PlayerComponent.class).left();
+            }
+        }, KeyCode.LEFT);
 
-            input.addAction(new UserAction("Move Right 2") {
-                @Override
-                protected void onAction() {
-                    player2.getComponent(PlayerComponent.class).right();
-                }
-            }, KeyCode.RIGHT);
+        input.addAction(new UserAction("Move Right 2") {
+            @Override
+            protected void onAction() {
+                player2.getComponent(PlayerComponent.class).right();
+            }
+        }, KeyCode.RIGHT);
 
-            input.addAction(new UserAction("Move Up 2") {
-                @Override
-                protected void onAction() {
-                    player2.getComponent(PlayerComponent.class).jump();
-                }
-            }, KeyCode.UP);
-
-
-            input.addAction(new UserAction("Duck2") {
-                @Override
-                protected void onAction() {
-                    player2.getComponent(PlayerComponent.class).down();
-                }
-
-                protected void onActionEnd() {
-                    player2.getComponent(PlayerComponent.class).downReleased();
-                }
-            }, KeyCode.DOWN);
+        input.addAction(new UserAction("Move Up 2") {
+            @Override
+            protected void onAction() {
+                player2.getComponent(PlayerComponent.class).jump();
+            }
+        }, KeyCode.UP);
 
 
-        }
+        input.addAction(new UserAction("Duck2") {
+            @Override
+            protected void onAction() {
+                player2.getComponent(PlayerComponent.class).down();
+            }
+
+            protected void onActionEnd() {
+                player2.getComponent(PlayerComponent.class).downReleased();
+            }
+        }, KeyCode.DOWN);
+
+    }
+
 
 
 

@@ -17,11 +17,13 @@ public class AnimationComponent extends Component {
 
     public AnimationComponent() {
         animIdle = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 1, 1);
-        animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 0, 3);
-        animPunch = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet.png").getImage(), 10, 70, 137, Duration.seconds(0.5), 4, 6);
+        animWalk = new AnimationChannel(FXGL.getAssetLoader().loadTexture("spritesheet-lopen.png").getImage(), 10, 90, 137, Duration.seconds(0.5), 0, 3);
+        animPunch = new AnimationChannel(FXGL.getAssetLoader().loadTexture("punch.png").getImage(), 10, 120, 137, Duration.seconds(0.5), 4, 6);
 
         texture = new AnimatedTexture(animIdle);
     }
+
+
 
     @Override
     public void onAdded() {

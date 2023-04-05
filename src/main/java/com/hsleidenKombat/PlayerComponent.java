@@ -3,6 +3,7 @@ package com.hsleidenKombat;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.TransformComponent;
 import com.almasb.fxgl.input.Input;
+import javafx.scene.input.KeyCode;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
@@ -13,6 +14,8 @@ public class PlayerComponent extends Component {
     private boolean isJumping = false;
     private boolean isDucking = false;
     private double gravity = 2500;
+
+
     private void applyGravity(double tpf) {
         position.translateY(-jumpSpeed * tpf);
         jumpSpeed -= gravity * tpf;
@@ -80,3 +83,5 @@ public class PlayerComponent extends Component {
         }
     }
 }
+
+
