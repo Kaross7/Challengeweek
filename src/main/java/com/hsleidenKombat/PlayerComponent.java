@@ -13,6 +13,7 @@ public class PlayerComponent extends Component {
     private boolean isJumping = false;
     private boolean isDucking = false;
     private double gravity = 2500;
+    private AnimationComponent animationComponent;
     private void applyGravity(double tpf) {
         position.translateY(-jumpSpeed * tpf);
         jumpSpeed -= gravity * tpf;
@@ -65,18 +66,19 @@ public class PlayerComponent extends Component {
 
 
     public void left() {
-        System.out.println("AnimationComponent: left()");
-
         if (position.getX() > 1) {
             position.translateX(-5 * speed);
+//            animationComponent.startMoving();
         }
+
+
 
     }
 
     public void right() {
-        System.out.println("AnimationComponent: right()");
         if (position.getX() < 735) {
             position.translateX(5 * speed);
+//            animationComponent.startMoving();
         }
     }
 }

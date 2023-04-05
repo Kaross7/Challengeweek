@@ -27,53 +27,33 @@ public class FactoryComponent {
         Entity player1 = entityBuilder()
 
                 .at(x, y)
-
                 .with(new AnimationComponent())
-
                 .with(new CollidableComponent(true))
-
                 .with(new HealthComponent())
-
                 .bbox(new HitBox(BoundingShape.box(65, 135)))
-
                 .type(EntityTypes.PLAYER1)
-
                 .build();
 
         player1.setScaleY(2.0);
-
         player1.addComponent(new PlayerComponent());
-
         return player1;
-
     }
 
     @Spawns("player2")
-
     public Entity spawnPlayer2(double x, double y) {
 
         Entity player2 = entityBuilder()
-
                 .at(x, y)
-
                 .with(new AnimationComponent())
-
                 .with(new CollidableComponent(true))
-
                 .bbox(new HitBox(BoundingShape.box(65, 135)))
-
                 .type(EntityTypes.PLAYER2)
-
                 .build();
 
         player2.setScaleY(2.0);
-
         player2.setScaleX(-1);
-
         player2.addComponent(new PlayerComponent());
-
         return player2;
-
     }
 
 }
