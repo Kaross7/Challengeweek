@@ -2,12 +2,8 @@ package com.hsleidenKombat;
 
 
 import javafx.scene.control.ProgressBar;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
@@ -32,35 +28,19 @@ public class Game extends GameApplication {
     private TextField player1NameField, player2NameField;
     private Button startButton;
 
-    private AnimationComponent animationComponent;
-
     private Text title;
     private boolean punchActive = false;
     private boolean punchActive2 = false;
 
     private ProgressBar healthBar1;
     private ProgressBar healthBar2;
-    boolean level1 = true;
-    boolean level2 = false;
-
-    boolean level3 = false;
-    boolean level4 = false;
     int player1wins = 0;
     int player2wins = 0;
-    int round = 1;
-
     private final int MAX_LEVEL = 3;
     private int currentLevel = 1;
+    private VBox endBox;
 
 
-    private void showWinningMessage(String message) {
-        Text winningText = new Text(message);
-        winningText.setFill(Color.YELLOWGREEN);
-        winningText.setFont(Font.font("Verdana", 30));
-        winningText.setX(getAppWidth() / 2 - winningText.getLayoutBounds().getWidth() / 2);
-        winningText.setY(getAppHeight() / 2);
-        getGameScene().addUINode(winningText);
-    }
 
     private void updateHealthBars() {
         int player1Health = player1.getComponent(HealthComponent.class).getHealth();
@@ -252,9 +232,12 @@ public class Game extends GameApplication {
 
 
         private void createMenu() {
-        VBox menuBox = new VBox(10);
-        StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(getAppWidth(), getAppHeight());
+            if (endBox != null) {
+                getGameScene().removeUINode(endBox);
+            }
+            VBox menuBox = new VBox(10);
+            StackPane stackPane = new StackPane();
+            stackPane.setPrefSize(getAppWidth(), getAppHeight());
 
         title = new Text("Hsleiden Kombat");
         title.setFont(Font.font("Verdana", 40));
@@ -268,8 +251,6 @@ public class Game extends GameApplication {
         menuBox.setTranslateX(getAppWidth() / 2 - 100);
         menuBox.setTranslateY(getAppHeight() / 2 - 100);
 
-//        player2.setX(500);
-//        player1.setX(-500);
 
         player1NameField = new TextField();
         player1NameField.setPromptText("Speler 1 naam");
@@ -338,9 +319,6 @@ public class Game extends GameApplication {
         getGameScene().setBackgroundRepeat("background-1.jpeg");
     }
     private void startlevel2(){
-        round += 1;
-        level1= false;
-        level2 = true;
         getGameScene().setBackgroundRepeat("background-2.png");
         player1.getComponent(HealthComponent.class).setHealth(100);
         player2.getComponent(HealthComponent.class).setHealth(100);
@@ -350,8 +328,6 @@ public class Game extends GameApplication {
     }
 
     private void startlevel3(){
-        round +=1;
-        level3 = true;
         getGameScene().setBackgroundRepeat("background-3.png");
         player1.getComponent(HealthComponent.class).setHealth(100);
         player2.getComponent(HealthComponent.class).setHealth(100);
@@ -360,7 +336,7 @@ public class Game extends GameApplication {
         updateHealthBars();
     }
     private void createEndScreen() {
-        VBox endBox = new VBox(10);
+        endBox = new VBox(10);
         endBox.setTranslateX(getAppWidth() / 2 - 100);
         endBox.setTranslateY(getAppHeight() / 2 - 100);
 
@@ -391,6 +367,13 @@ public class Game extends GameApplication {
             player1wins = 0;
             player2wins = 0;
             currentLevel = 1;
+
+            // Remove the end screen
+            if (endBox != null) {
+                getGameScene().removeUINode(endBox);
+            }
+
+            // Show the menu
             createMenu();
         });
 
