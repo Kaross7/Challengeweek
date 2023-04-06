@@ -1,6 +1,7 @@
 package com.hsleidenKombat;
 
 
+import javafx.scene.control.ProgressBar;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -37,13 +38,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 import java.nio.file.Paths;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class Game extends GameApplication {
 
-    private Entity player1, player2, punch;
+    private Entity player1, player2, punch, punch2;
 
     private TextField player1NameField, player2NameField;
     private Button startButton;
@@ -51,12 +53,55 @@ public class Game extends GameApplication {
     private AnimationComponent animationComponent;
 
     private Text title;
+    private boolean punchActive = false;
+    private boolean punchActive2 = false;
+
+    private ProgressBar healthBar1;
+    private ProgressBar healthBar2;
+
+
+    private void showWinningMessage(String message) {
+        Text winningText = new Text(message);
+        winningText.setFill(Color.YELLOWGREEN);
+        winningText.setFont(Font.font("Verdana", 30));
+        winningText.setX(getAppWidth() / 2 - winningText.getLayoutBounds().getWidth() / 2);
+        winningText.setY(getAppHeight() / 2);
+        getGameScene().addUINode(winningText);
+    }
+
+    private void updateHealthBars() {
+        int player1Health = player1.getComponent(HealthComponent.class).getHealth();
+        int player2Health = player2.getComponent(HealthComponent.class).getHealth();
+
+        healthBar1.setProgress(player1Health / 100.0);
+        healthBar2.setProgress(player2Health / 100.0);
+    }
+
+    private void createHealthBars() {
+        healthBar1 = new ProgressBar();
+        healthBar1.setMinWidth(200);
+        healthBar1.setMaxWidth(200);
+        healthBar1.setTranslateX(50);
+        healthBar1.setTranslateY(75);
+        healthBar1.setProgress(1);
+        healthBar1.setStyle("-fx-accent: red;");
+
+        healthBar2 = new ProgressBar();
+        healthBar2.setMinWidth(200);
+        healthBar2.setMaxWidth(200);
+        healthBar2.setTranslateX(getAppWidth() - 250);
+        healthBar2.setTranslateY(75);
+        healthBar2.setProgress(1);
+        healthBar2.setStyle("-fx-accent: red;");
+
+        getGameScene().addUINode(healthBar1);
+        getGameScene().addUINode(healthBar2);
+    }
+
 
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setTitle("Hsleiden Kombat");
-//        settings.setWidth(1000);
-//        settings.setHeight(1000);
         settings.setFullScreenFromStart(true);
         settings.setFullScreenAllowed(true);
         settings.setDeveloperMenuEnabled(true);
@@ -92,6 +137,7 @@ public class Game extends GameApplication {
         player1NameField.setPromptText("Speler 1 naam");
         player1NameField.setMaxWidth(200);
 
+
         player2NameField = new TextField();
         player2NameField.setPromptText("Speler 2 naam");
         player2NameField.setMaxWidth(200);
@@ -121,7 +167,9 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGame() {
+        getGameWorld().addEntityFactory(new ShooterFactory());
         getGameScene().setBackgroundRepeat("login.jpeg");
+
 
         createMenu();
 
@@ -133,12 +181,10 @@ public class Game extends GameApplication {
             protected void onAction() {
                 player1.getComponent(PlayerComponent.class).left();
                 player1.getComponent(AnimationComponent.class).startMoving();
-//                    animationComponent.startMoving();
             }
 
             @Override
             protected void onActionEnd() {
-//                    animationComponent.stopMoving();
                 player1.getComponent(AnimationComponent.class).stopMoving();
             }
         }, KeyCode.A);
@@ -154,7 +200,6 @@ public class Game extends GameApplication {
 
             @Override
             protected void onActionEnd() {
-//                    animationComponent.stopMoving();
                 player1.getComponent(AnimationComponent.class).stopMoving();
             }
         }, KeyCode.D);
@@ -182,14 +227,12 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 player2.getComponent(PlayerComponent.class).left();
-//                    animationComponent.startMoving();
                 player2.getComponent(AnimationComponent.class).startMoving();
 
             }
 
             @Override
             protected void onActionEnd() {
-//                    animationComponent.stopMoving();
                 player2.getComponent(AnimationComponent.class).stopMoving();
             }
         }, KeyCode.LEFT);
@@ -198,14 +241,12 @@ public class Game extends GameApplication {
             @Override
             protected void onAction() {
                 player2.getComponent(PlayerComponent.class).right();
-//                    animationComponent.startMoving();
                 player2.getComponent(AnimationComponent.class).startMoving();
 
             }
 
             @Override
             protected void onActionEnd() {
-//                    animationComponent.stopMoving();
                 player2.getComponent(AnimationComponent.class).stopMoving();
             }
         }, KeyCode.RIGHT);
@@ -229,32 +270,50 @@ public class Game extends GameApplication {
             }
         }, KeyCode.DOWN);
 
+
         input.addAction(new UserAction("Punch") {
             @Override
             protected void onAction() {
-                player1.getComponent(AnimationComponent.class).startPunch();
+                if (!punchActive) {
+                    player1.getComponent(AnimationComponent.class).startPunch();
+                    punch = getGameWorld().spawn("punch", player1.getPosition().getX() + 100, player1.getPosition().getY());
+                    punchActive = true;
+                }
             }
 
             @Override
             protected void onActionEnd() {
-                player1.getComponent(AnimationComponent.class).finishPunch();
+                if (punchActive) {
+                    player1.getComponent(AnimationComponent.class).finishPunch();
+                    punch.removeFromWorld();
+                    punchActive = false;
+                }
             }
         }, KeyCode.F);
 
         input.addAction(new UserAction("Punch2") {
             @Override
             protected void onAction() {
-                player2.getComponent(AnimationComponent.class).startPunch();
+                if (!punchActive2) {
+                    player2.getComponent(AnimationComponent.class).startPunch();
+                    punch2 = getGameWorld().spawn("punch2", player2.getPosition().getX() - 50, player2.getPosition().getY());
+                    punchActive2 = true;
+                }
             }
 
             @Override
             protected void onActionEnd() {
-                player2.getComponent(AnimationComponent.class).finishPunch();
+                if (punchActive2) {
+                    player2.getComponent(AnimationComponent.class).finishPunch();
+                    punch2.removeFromWorld();
+                    punchActive2 = false;
+                }
             }
         }, KeyCode.L);
     }
 
-    private void createMenu() {
+
+        private void createMenu() {
         VBox menuBox = new VBox(10);
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(getAppWidth(), getAppHeight());
@@ -315,7 +374,11 @@ public class Game extends GameApplication {
         getGameWorld().addEntity(player2);
 
 
+
+        createHealthBars();
+
         startlevel2();
+
     }
 
 
@@ -345,7 +408,66 @@ public class Game extends GameApplication {
                 player2.getComponent(PlayerComponent.class).setcollidedLeft(true);
             }
         });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER2, EntityTypes.PUNCH) {
+            @Override
+            protected void onCollision(Entity player2, Entity punch) {
+                player2.getComponent(HealthComponent.class).decrease(5);
+                player2.setX(player2.getX() + 30);
+                System.out.println(player2.getComponent(HealthComponent.class).getHealth());
+
+                updateHealthBars();
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PUNCH2) {
+            @Override
+            protected void onCollision(Entity player1, Entity punch2) {
+                player1.getComponent(HealthComponent.class).decrease(5);
+                player1.setX(player1.getX() - 30);
+                System.out.println(player1.getComponent(HealthComponent.class).getHealth());
+
+                updateHealthBars();
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER2, EntityTypes.PUNCH) {
+            @Override
+            protected void onCollision(Entity player2, Entity punch) {
+                player2.getComponent(HealthComponent.class).decrease(5);
+                player2.setX(player2.getX() + 30);
+                System.out.println(player2.getComponent(HealthComponent.class).getHealth());
+
+                updateHealthBars(); // Update health bars after the collision
+
+                // Remove player 2 if health is 0 or below
+                if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
+                    player2.removeFromWorld();
+                    // Perform any other necessary actions, like showing a "game over" screen
+                }
+            }
+        });
+
+        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PUNCH2) {
+            @Override
+            protected void onCollision(Entity player1, Entity punch2) {
+                player1.getComponent(HealthComponent.class).decrease(5);
+                player1.setX(player1.getX() - 30);
+                System.out.println(player1.getComponent(HealthComponent.class).getHealth());
+
+                updateHealthBars(); // Update health bars after the collision
+
+                // Remove player 1 if health is 0 or below
+                if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
+                    player1.removeFromWorld();
+                    // Perform any other necessary actions, like showing a "game over" screen
+
+
+                }
+            }
+        });
     }
+
 
     public static void main (String[]args){
             launch(args);
