@@ -10,36 +10,18 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.core.asset.AssetLoaderService;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.components.BoundingBoxComponent;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.sun.javafx.geom.Point2D;
-import com.sun.javafx.geom.Rectangle;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
-
-import java.nio.file.Paths;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
@@ -62,8 +44,12 @@ public class Game extends GameApplication {
     boolean level2 = false;
 
     boolean level3 = false;
+    boolean level4 = false;
     int player1wins = 0;
     int player2wins = 0;
+
+    private final int MAX_LEVEL = 3;
+    private int currentLevel = 1;
 
 
     private void showWinningMessage(String message) {
@@ -114,62 +100,7 @@ public class Game extends GameApplication {
     }
 
 
-    private void createMenu1() {
-        GridPane menuBox = new GridPane();
-        menuBox.setHgap(10);
-        menuBox.setVgap(10);
-        menuBox.setPadding(new Insets(10, 10, 10, 10));
-        ColumnConstraints column = new ColumnConstraints();
-        column.setHalignment(HPos.CENTER);
-        menuBox.getColumnConstraints().add(column);
 
-        StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(getAppWidth(), getAppHeight());
-
-        title = new Text("Hsleiden Kombat");
-        title.setFont(Font.font("Verdana", 60));
-        title.setFill(Color.WHITE);
-        title.setText(title.getText().toUpperCase());
-
-        StackPane titlePane = new StackPane(); // Nieuwe StackPane voor alleen de titel
-        titlePane.getChildren().add(title);
-        stackPane.getChildren().add(titlePane);
-
-        getGameScene().addUINode(stackPane);
-
-        menuBox.setTranslateY(getAppHeight() / 2 - 100);
-
-        player1NameField = new TextField();
-        player1NameField.setPromptText("Speler 1 naam");
-        player1NameField.setMaxWidth(200);
-
-
-        player2NameField = new TextField();
-        player2NameField.setPromptText("Speler 2 naam");
-        player2NameField.setMaxWidth(200);
-
-        startButton = new Button("Beginnen");
-        startButton.setMaxWidth(200);
-
-        StackPane menuContainer = new StackPane(); // Nieuwe StackPane voor het menu
-        menuContainer.getChildren().add(menuBox);
-        menuContainer.setTranslateY(getAppHeight() / 2 - 100);
-
-        menuBox.add(player1NameField, 0, 0);
-        menuBox.add(player2NameField, 0, 1);
-        menuBox.add(startButton, 0, 2);
-        getGameScene().addUINode(menuContainer);
-
-        startButton.setOnAction(e -> {
-            String player1Name = player1NameField.getText();
-            String player2Name = player2NameField.getText();
-
-            if (!player1Name.isEmpty() && !player2Name.isEmpty()) {
-                // Doel: start het spel en verberg het menu scherm
-                startGame();
-            }
-        });
-    }
 
     @Override
     protected void initGame() {
@@ -396,7 +327,7 @@ public class Game extends GameApplication {
 
         createHealthBars();
 
-        startlevel1();
+        nextLevel();
 
     }
 
@@ -425,6 +356,44 @@ public class Game extends GameApplication {
         player2.setPosition(700, 300);
         updateHealthBars();
     }
+    private void createEndScreen() {
+        VBox endBox = new VBox(10);
+        endBox.setTranslateX(getAppWidth() / 2 - 100);
+        endBox.setTranslateY(getAppHeight() / 2 - 100);
+
+        Text endText = new Text();
+        endText.setFont(Font.font("Verdana", 30));
+        endText.setFill(Color.YELLOWGREEN);
+
+        if(player1wins > player2wins){
+            endText.setText(player1NameField.getText() + " wins!");
+        } else if(player1wins < player2wins){
+            endText.setText(player2NameField.getText() + " wins!");
+        }
+
+        Text player1WinsText = new Text(player1NameField.getText() + ": " + player1wins);
+        player1WinsText.setFill(Color.YELLOWGREEN);
+        player1WinsText.setFont(Font.font("Verdana", 20));
+
+        Text player2WinsText = new Text(player2NameField.getText() + ": " + player2wins);
+        player2WinsText.setFill(Color.YELLOWGREEN);
+        player2WinsText.setFont(Font.font("Verdana", 20));
+
+        Button restartButton = new Button("Restart");
+        restartButton.setMaxWidth(200);
+        restartButton.setOnAction(e -> {
+            player1.removeFromWorld();
+            player2.removeFromWorld();
+            // Reset the game
+            player1wins = 0;
+            player2wins = 0;
+            currentLevel = 1;
+            createMenu();
+        });
+
+        endBox.getChildren().addAll(endText, player1WinsText, player2WinsText, restartButton);
+        getGameScene().addUINode(endBox);
+    }
 
 
 
@@ -446,6 +415,11 @@ public class Game extends GameApplication {
                 System.out.println(player2.getComponent(HealthComponent.class).getHealth());
 
                 updateHealthBars();
+
+                if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
+                    player1wins += 1;
+                    nextLevel();
+                }
             }
         });
 
@@ -456,84 +430,28 @@ public class Game extends GameApplication {
                 player1.setX(player1.getX() - 30);
                 System.out.println(player1.getComponent(HealthComponent.class).getHealth());
 
-            }
-        });
-
-        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER2, EntityTypes.PUNCH) {
-            @Override
-            protected void onCollision(Entity player2, Entity punch) {
-                player2.getComponent(HealthComponent.class).decrease(5);
-                player2.setX(player2.getX() + 30);
-                System.out.println(player2.getComponent(HealthComponent.class).getHealth());
-
-                updateHealthBars(); // Update health bars after the collision
-
-                // Remove player 2 if health is 0 or below
-                if (level1) {
-                    if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
-                        startlevel2();
-                        player1wins += 1;
-                        System.out.println(player1wins);
-                    }
-                }
-
-                if (level2) {
-                    if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
-                        startlevel3();
-                        player1wins += 1;
-                        System.out.println(player1wins);
-                    }
-                }
-                if (level3) {
-                    if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
-                        startlevel3();
-                        player1wins += 1;
-                        System.out.println(player1wins);
-                    }
-
-                    // Perform any other necessary actions, like showing a "game over" screen
-                }
-
-            }
-        });
-
-        FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER1, EntityTypes.PUNCH2) {
-            @Override
-            protected void onCollision(Entity player1, Entity punch2) {
-                player1.getComponent(HealthComponent.class).decrease(5);
-                player1.setX(player1.getX() - 30);
-                System.out.println(player1.getComponent(HealthComponent.class).getHealth());
-
-                updateHealthBars(); // Update health bars after the collision
-
-                if (level1) {
-                    if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
-                        startlevel2();
-                        player2wins += 1;
-                        System.out.println(player2wins);
-                    }
-                }
-
-                if (level2) {
-                    if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
-                        startlevel3();
-                        player2wins +=1;
-                        System.out.println(player2wins);
-                    }
-                }
-                if (level3) {
-                    if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
-                        startlevel3();
-                        player2wins +=1;
-                        System.out.println(player2wins);
-                    }
+                if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
+                    player2wins += 1;
+                    nextLevel();
                 }
             }
-
-
-
         });
     }
+
+    public void nextLevel() {
+        if (currentLevel > MAX_LEVEL) {
+            createEndScreen();
+        } else if (currentLevel == 1) {
+            startlevel1();
+        }else if (currentLevel == 2) {
+            startlevel2();
+        } else if (currentLevel == 3) {
+            startlevel3();
+        }
+
+        currentLevel += 1;
+    }
+
 
 
     public static void main (String[]args){
