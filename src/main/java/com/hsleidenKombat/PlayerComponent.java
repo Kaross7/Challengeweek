@@ -53,7 +53,7 @@ public class PlayerComponent extends Component {
         if (!isJumping && !isDucking) {
             isDucking = true;
             position.setScaleY(1.0);
-            position.setY(360);
+            position.setY(335);
         }
     }
 
@@ -61,7 +61,7 @@ public class PlayerComponent extends Component {
         if (isDucking) {
             isDucking = false;
             position.setScaleY(2.0);
-            position.setY(260);
+            position.setY(255);
         }
     }
 

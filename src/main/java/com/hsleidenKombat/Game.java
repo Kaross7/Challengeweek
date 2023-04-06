@@ -40,7 +40,8 @@ public class Game extends GameApplication {
     private int currentLevel = 1;
     private VBox endBox;
 
-
+    private Text player1NameText = new Text();
+    private Text player2NameText = new Text();
 
     private void updateHealthBars() {
         int player1Health = player1.getComponent(HealthComponent.class).getHealth();
@@ -88,6 +89,16 @@ public class Game extends GameApplication {
         getGameWorld().addEntityFactory(new ShooterFactory());
         getGameScene().setBackgroundRepeat("login.jpeg");
 
+        player1NameText.setFill(Color.YELLOWGREEN);
+        player2NameText.setFill(Color.YELLOWGREEN);
+
+        player1NameText.setX(50);
+        player1NameText.setY(50);
+        player2NameText.setX(getAppWidth() - 150);
+        player2NameText.setY(50);
+
+        getGameScene().addUINode(player1NameText);
+        getGameScene().addUINode(player2NameText);
 
         createMenu();
 
@@ -286,26 +297,19 @@ public class Game extends GameApplication {
         startButton.setVisible(false);
         getGameScene().setBackgroundRepeat("login.jpeg");
 
+        if (player1 != null && player2 != null) {
+            player1.removeFromWorld();
+            player2.removeFromWorld();
+        }
+
         FactoryComponent factoryComponent = new FactoryComponent();
         player1 = factoryComponent.spawnPlayer1(100, 260);
         getGameWorld().addEntity(player1);
         player2 = factoryComponent.spawnPlayer2(700, 260);
         getGameWorld().addEntity(player2);
 
-        Text player1NameText = new Text(player1NameField.getText().toUpperCase());
-        Text player2NameText = new Text(player2NameField.getText().toUpperCase());
-
-        player1NameText.setFill(Color.YELLOWGREEN);
-        player2NameText.setFill(Color.YELLOWGREEN);
-
-        player1NameText.setX(50);
-        player1NameText.setY(50);
-        player2NameText.setX(getAppWidth() - 150);
-        player2NameText.setY(50);
-
-        getGameScene().addUINode(player1NameText);
-        getGameScene().addUINode(player2NameText);
-
+        player1NameText.setText(player1NameField.getText().toUpperCase());
+        player2NameText.setText(player2NameField.getText().toUpperCase());
 
         createHealthBars();
 
@@ -340,6 +344,9 @@ public class Game extends GameApplication {
         endBox.setTranslateX(getAppWidth() / 2 - 100);
         endBox.setTranslateY(getAppHeight() / 2 - 100);
 
+        player1.setPosition(100, 300);
+        player2.setPosition(700, 300);
+
         Text endText = new Text();
         endText.setFont(Font.font("Verdana", 30));
         endText.setFill(Color.YELLOWGREEN);
@@ -361,12 +368,12 @@ public class Game extends GameApplication {
         Button restartButton = new Button("Restart");
         restartButton.setMaxWidth(200);
         restartButton.setOnAction(e -> {
-            player1.removeFromWorld();
-            player2.removeFromWorld();
             // Reset the game
             player1wins = 0;
             player2wins = 0;
             currentLevel = 1;
+
+
 
             // Remove the end screen
             if (endBox != null) {
@@ -442,7 +449,6 @@ public class Game extends GameApplication {
 
         currentLevel += 1;
     }
-
 
 
     public static void main (String[]args){
