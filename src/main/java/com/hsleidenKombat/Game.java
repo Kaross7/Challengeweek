@@ -211,7 +211,7 @@ public class Game extends GameApplication {
 
         input.addAction(new UserAction("Punch2") {
             @Override
-            protected void onAction() {
+            protected void onActionBegin() {
                 if (!punchActive2) {
                     player2.getComponent(AnimationComponent.class).startPunch();
                     punch2 = getGameWorld().spawn("punch2", player2.getPosition().getX() - 30, player2.getPosition().getY());
@@ -227,7 +227,7 @@ public class Game extends GameApplication {
                     punchActive2 = false;
                 }
             }
-        }, KeyCode.L);
+        }, KeyCode.NUMPAD0);
     }
 
 
@@ -287,9 +287,9 @@ public class Game extends GameApplication {
         getGameScene().setBackgroundRepeat("login.jpeg");
 
         FactoryComponent factoryComponent = new FactoryComponent();
-        player1 = factoryComponent.spawnPlayer1(100, 300);
+        player1 = factoryComponent.spawnPlayer1(100, 260);
         getGameWorld().addEntity(player1);
-        player2 = factoryComponent.spawnPlayer2(700, 300);
+        player2 = factoryComponent.spawnPlayer2(700, 260);
         getGameWorld().addEntity(player2);
 
         Text player1NameText = new Text(player1NameField.getText().toUpperCase());
@@ -391,6 +391,10 @@ public class Game extends GameApplication {
                 player1.getComponent(PlayerComponent.class).setcollidedRight(true);
                 player2.getComponent(PlayerComponent.class).setcollidedLeft(true);
             }
+            protected void onCollisionEnd(Entity player1, Entity player2) {
+                player1.getComponent(PlayerComponent.class).setcollidedRight(false);
+                player2.getComponent(PlayerComponent.class).setcollidedLeft(false);
+            }
         });
 
         FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityTypes.PLAYER2, EntityTypes.PUNCH) {
@@ -415,6 +419,7 @@ public class Game extends GameApplication {
                 player1.getComponent(HealthComponent.class).decrease(5);
                 player1.setX(player1.getX() - 30);
                 System.out.println(player1.getComponent(HealthComponent.class).getHealth());
+                updateHealthBars();
 
                 if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
                     player2wins += 1;

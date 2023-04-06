@@ -23,7 +23,7 @@ public class FactoryComponent {
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .with(new HealthComponent())
-                .bbox(new HitBox(BoundingShape.box(65, 135)))
+                .bbox(new HitBox(BoundingShape.box(65, 66)))
                 .type(EntityTypes.PLAYER1)
                 .build();
 
@@ -40,7 +40,7 @@ public class FactoryComponent {
                 .with(new AnimationComponent())
                 .with(new CollidableComponent(true))
                 .with(new HealthComponent())
-                .bbox(new HitBox(BoundingShape.box(65, 135)))
+                .bbox(new HitBox(BoundingShape.box(65, 66)))
                 .type(EntityTypes.PLAYER2)
                 .build();
 

@@ -19,7 +19,7 @@ public class ShooterFactory implements EntityFactory{
                 .type(EntityTypes.PUNCH)
                 .with(new CollidableComponent(true))
                 .with(new HealthComponent())
-                .viewWithBBox(new Rectangle(10, 2, Color.BLUE))
+                .viewWithBBox(new Rectangle(10, 2, Color.TRANSPARENT))
                 .build();
     }
     @Spawns("punch2")
@@ -28,7 +28,7 @@ public class ShooterFactory implements EntityFactory{
                 .type(EntityTypes.PUNCH2)
                 .with(new CollidableComponent(true))
                 .with(new HealthComponent())
-                .viewWithBBox(new Rectangle(10, 2, Color.BLUE))
+                .viewWithBBox(new Rectangle(10, 2, Color.TRANSPARENT))
                 .build();
     }
 
