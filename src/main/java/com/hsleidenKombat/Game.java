@@ -58,6 +58,12 @@ public class Game extends GameApplication {
 
     private ProgressBar healthBar1;
     private ProgressBar healthBar2;
+    boolean level1 = true;
+    boolean level2 = false;
+
+    boolean level3 = false;
+    int player1wins = 0;
+    int player2wins = 0;
 
 
     private void showWinningMessage(String message) {
@@ -320,7 +326,7 @@ public class Game extends GameApplication {
 
         title = new Text("Hsleiden Kombat");
         title.setFont(Font.font("Verdana", 40));
-        title.setFill(Color.BLACK);
+        title.setFill(Color.YELLOWGREEN);
         title.setText(title.getText().toUpperCase());
 
         stackPane.getChildren().add(title);
@@ -373,30 +379,53 @@ public class Game extends GameApplication {
         player2 = factoryComponent.spawnPlayer2(700, 300);
         getGameWorld().addEntity(player2);
 
+        Text player1NameText = new Text(player1NameField.getText().toUpperCase());
+        Text player2NameText = new Text(player2NameField.getText().toUpperCase());
+
+        player1NameText.setFill(Color.YELLOWGREEN);
+        player2NameText.setFill(Color.YELLOWGREEN);
+
+        player1NameText.setX(50);
+        player1NameText.setY(50);
+        player2NameText.setX(getAppWidth() - 150);
+        player2NameText.setY(50);
+
+        getGameScene().addUINode(player1NameText);
+        getGameScene().addUINode(player2NameText);
 
 
         createHealthBars();
 
-        startlevel2();
+        startlevel1();
 
     }
 
 
+
+    private void startlevel1(){
+        getGameScene().setBackgroundRepeat("background-1.jpeg");
+    }
     private void startlevel2(){
-        this.title.setVisible(false);
-        player1NameField.setVisible(false);
-        player2NameField.setVisible(false);
-        startButton.setVisible(false);
-        getGameScene().setBackgroundRepeat("background7.jpeg");
+        level1= false;
+        level2 = true;
+        getGameScene().setBackgroundRepeat("background-2.png");
+        player1.getComponent(HealthComponent.class).setHealth(100);
+        player2.getComponent(HealthComponent.class).setHealth(100);
+        player1.setPosition(100, 300);
+        player2.setPosition(700, 300);
+        updateHealthBars();
     }
 
     private void startlevel3(){
-        this.title.setVisible(false);
-        player1NameField.setVisible(false);
-        player2NameField.setVisible(false);
-        startButton.setVisible(false);
-        getGameScene().setBackgroundRepeat("background7.jpeg");
+        level3 = true;
+        getGameScene().setBackgroundRepeat("background-3.png");
+        player1.getComponent(HealthComponent.class).setHealth(100);
+        player2.getComponent(HealthComponent.class).setHealth(100);
+        player1.setPosition(100, 300);
+        player2.setPosition(700, 300);
+        updateHealthBars();
     }
+
 
 
 
@@ -427,7 +456,6 @@ public class Game extends GameApplication {
                 player1.setX(player1.getX() - 30);
                 System.out.println(player1.getComponent(HealthComponent.class).getHealth());
 
-                updateHealthBars();
             }
         });
 
@@ -441,10 +469,31 @@ public class Game extends GameApplication {
                 updateHealthBars(); // Update health bars after the collision
 
                 // Remove player 2 if health is 0 or below
-                if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
-                    player2.removeFromWorld();
+                if (level1) {
+                    if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
+                        startlevel2();
+                        player1wins += 1;
+                        System.out.println(player1wins);
+                    }
+                }
+
+                if (level2) {
+                    if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
+                        startlevel3();
+                        player1wins += 1;
+                        System.out.println(player1wins);
+                    }
+                }
+                if (level3) {
+                    if (player2.getComponent(HealthComponent.class).getHealth() <= 0) {
+                        startlevel3();
+                        player1wins += 1;
+                        System.out.println(player1wins);
+                    }
+
                     // Perform any other necessary actions, like showing a "game over" screen
                 }
+
             }
         });
 
@@ -457,14 +506,32 @@ public class Game extends GameApplication {
 
                 updateHealthBars(); // Update health bars after the collision
 
-                // Remove player 1 if health is 0 or below
-                if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
-                    player1.removeFromWorld();
-                    // Perform any other necessary actions, like showing a "game over" screen
+                if (level1) {
+                    if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
+                        startlevel2();
+                        player2wins += 1;
+                        System.out.println(player2wins);
+                    }
+                }
 
-
+                if (level2) {
+                    if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
+                        startlevel3();
+                        player2wins +=1;
+                        System.out.println(player2wins);
+                    }
+                }
+                if (level3) {
+                    if (player1.getComponent(HealthComponent.class).getHealth() <= 0) {
+                        startlevel3();
+                        player2wins +=1;
+                        System.out.println(player2wins);
+                    }
                 }
             }
+
+
+
         });
     }
 
