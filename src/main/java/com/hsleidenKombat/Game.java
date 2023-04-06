@@ -64,6 +64,7 @@ public class Game extends GameApplication {
     boolean level3 = false;
     int player1wins = 0;
     int player2wins = 0;
+    int round = 1;
 
 
     private void showWinningMessage(String message) {
@@ -282,7 +283,7 @@ public class Game extends GameApplication {
             protected void onAction() {
                 if (!punchActive) {
                     player1.getComponent(AnimationComponent.class).startPunch();
-                    punch = getGameWorld().spawn("punch", player1.getPosition().getX() + 100, player1.getPosition().getY());
+                    punch = getGameWorld().spawn("punch", player1.getPosition().getX() + 80, player1.getPosition().getY());
                     punchActive = true;
                 }
             }
@@ -302,7 +303,7 @@ public class Game extends GameApplication {
             protected void onAction() {
                 if (!punchActive2) {
                     player2.getComponent(AnimationComponent.class).startPunch();
-                    punch2 = getGameWorld().spawn("punch2", player2.getPosition().getX() - 50, player2.getPosition().getY());
+                    punch2 = getGameWorld().spawn("punch2", player2.getPosition().getX() - 30, player2.getPosition().getY());
                     punchActive2 = true;
                 }
             }
@@ -406,6 +407,7 @@ public class Game extends GameApplication {
         getGameScene().setBackgroundRepeat("background-1.jpeg");
     }
     private void startlevel2(){
+        round += 1;
         level1= false;
         level2 = true;
         getGameScene().setBackgroundRepeat("background-2.png");
@@ -417,6 +419,7 @@ public class Game extends GameApplication {
     }
 
     private void startlevel3(){
+        round +=1;
         level3 = true;
         getGameScene().setBackgroundRepeat("background-3.png");
         player1.getComponent(HealthComponent.class).setHealth(100);
